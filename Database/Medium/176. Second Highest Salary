@@ -1,0 +1,7 @@
+https://leetcode.com/problems/second-highest-salary/
+
+SELECT MAX(t.Salary) AS SecondHighestSalary 
+FROM (
+    SELECT Salary, ROW_NUMBER() OVER(ORDER BY Salary DESC) AS rw
+    FROM Employee) t 
+WHERE t.rw=2
