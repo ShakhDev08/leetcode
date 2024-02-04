@@ -1,0 +1,10 @@
+-- https://leetcode.com/problems/second-degree-follower/
+
+SELECT followee as follower, num
+FROM (
+  SELECT followee, count(follower) as num
+  FROM follow
+  GROUP BY followee 
+) t WHERE EXISTS (
+      SELECT 1 FROM follow b WHERE t.followee=b.follower
+  )
