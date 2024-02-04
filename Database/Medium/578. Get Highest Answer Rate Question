@@ -1,0 +1,11 @@
+-- https://leetcode.com/problems/get-highest-answer-rate-question/
+
+SELECT TOP 1 question_id AS survey_log
+FROM (
+  SELECT question_id,
+  CAST(SUM(CASE WHEN action='answer' THEN 1 ELSE 0 END) AS DECIMAL(10,2))/
+  SUM(CASE WHEN action='show' THEN 1 ELSE 0 END) AS rate
+  FROM SurveyLog
+  GROUP BY question_id
+) t
+ORDER BY rate DESC, question_id
