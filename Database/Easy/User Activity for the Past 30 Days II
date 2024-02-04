@@ -1,4 +1,4 @@
 --https://leetcode.com/problems/user-activity-for-the-past-30-days-ii/
-SELECT ISNULL(ROUND(CAST(COUNT(DISTINCT session_id) AS DECIMAL(10,2))/NULLIF(COUNT(DISTINCT user_id),0),2),0) AS average_sessions_per_user\
+SELECT ISNULL(ROUND(CAST(COUNT(DISTINCT session_id) AS DECIMAL(10,2))/NULLIF(COUNT(DISTINCT user_id),0),2),0) AS average_sessions_per_user
 FROM Activity
 WHERE activity_date>DATEADD(day,-30,'2019-07-27') AND activity_date<='2019-07-27'
