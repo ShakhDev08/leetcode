@@ -1,0 +1,7 @@
+-- https://leetcode.com/problems/products-worth-over-invoices/
+
+SELECT a.name, ISNULL(SUM(b.rest),0) AS rest, ISNULL(SUM(b.paid),0) AS paid, ISNULL(SUM(b.canceled),0) AS canceled, 
+ISNULL(SUM(b.refunded),0)AS refunded
+FROM  Product a LEFT JOIN Invoice b ON a.product_id=b.product_id
+GROUP BY a.name
+ORDER BY a.name
