@@ -1,0 +1,6 @@
+https://leetcode.com/problems/compute-the-rank-as-a-percentage/
+
+SELECT student_id, department_id,
+ISNULL(ROUND(CAST((RANK() OVER(PARTITION BY department_id ORDER BY mark DESC) -1) AS DECIMAL(10,2))*100/
+NULLIF(COUNT(student_id) OVER(PARTITION BY department_id)-1,0),2),0) AS percentage
+FROM Students
