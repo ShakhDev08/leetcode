@@ -1,0 +1,8 @@
+https://leetcode.com/problems/unpopular-books/
+
+SELECT a.book_id, a.name 
+FROM books a LEFT JOIN orders b on a.book_id=b.book_id 
+WHERE available_from< DATEADD(month, -1, '2019-06-23')
+GROUP BY a.book_id, a.name
+HAVING SUM(CASE WHEN dispatch_date BETWEEN DATEADD(year, -1, '2019-06-23') AND '2019-06-23' THEN b.quantity ELSE 0 END) <10 
+ORDER BY a.book_id
