@@ -1,5 +1,6 @@
 --https://leetcode.com/problems/class-performance/
 
+-- 1st way
 WITH ranks AS(
   SELECT student_id, (assignment1+assignment2+assignment3) total_scores,
   ROW_NUMBER() OVER(ORDER BY (assignment1+assignment2+assignment3) ASC) as min_rank,
@@ -9,3 +10,8 @@ WITH ranks AS(
 SELECT b.total_scores-a.total_scores AS difference_in_score
 FROM ranks a 
 JOIN ranks b ON a.min_rank=b.max_rank AND (a.min_rank=1 OR b.max_rank=1)
+
+
+--2nd way
+SELECT MAX(assignment1+assignment2+assignment3)-MIN(assignment1+assignment2+assignment3) AS difference_in_score
+FROM Scores
