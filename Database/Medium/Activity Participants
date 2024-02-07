@@ -1,0 +1,14 @@
+-- https://leetcode.com/problems/activity-participants/
+
+WITH a AS(
+    SELECT 
+        a.name as activity, 
+        COUNT(f.id) AS participants,
+        DENSE_RANK() OVER(ORDER BY COUNT(f.id) ASC) AS rw_min,
+        DENSE_RANK() OVER(ORDER BY COUNT(f.id) DESC) AS rw_max
+    FROM Activities a
+    JOIN Friends f ON a.name=f.activity
+    GROUP BY a.name
+)
+SELECT activity
+FROM a WHERE rw_min<>1 AND rw_max<>1
