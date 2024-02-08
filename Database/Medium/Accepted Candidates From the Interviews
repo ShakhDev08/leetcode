@@ -1,0 +1,7 @@
+--https://leetcode.com/problems/accepted-candidates-from-the-interviews/
+
+SELECT c.candidate_id
+FROM Candidates c 
+JOIN Rounds r ON c.interview_id=r.interview_id AND c.years_of_exp>=2 
+GROUP BY c.candidate_id
+HAVING SUM(r.score)>15
