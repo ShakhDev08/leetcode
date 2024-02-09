@@ -1,0 +1,10 @@
+SELECT
+bike_number,
+end_time
+FROM (
+    SELECT  bike_number,
+            end_time,
+            ROW_NUMBER() OVER(PARTITION BY bike_number ORDER BY end_time DESC) AS rw
+    FROM Bikes
+) t WHERE t.rw=1
+ORDER BY end_time DESC
