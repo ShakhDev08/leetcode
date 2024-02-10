@@ -1,0 +1,24 @@
+--https://leetcode.com/problems/highest-salaries-difference/
+
+--my approach
+WITH a AS(
+    SELECT  
+        department, 
+        salary,
+        ROW_NUMBER() OVER(PARTITION BY department ORDER BY salary DESC) ranking
+    FROM Salaries
+    WHERE department IN ('Engineering', 'Marketing')
+)
+SELECT ABS(t.salary-k.salary) AS salary_difference
+FROM a t 
+JOIN a k ON t.ranking=k.ranking AND t.department='Engineering' AND k.department='Marketing'
+WHERE t.ranking=1
+
+
+--approach I liked and learnt:
+select max(s) - min(s) as salary_difference
+from(
+select department, max(salary) s
+from salaries
+where department = 'Engineering' or department = 'Marketing'
+group by department) a
