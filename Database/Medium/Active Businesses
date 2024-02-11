@@ -1,0 +1,14 @@
+-- https://leetcode.com/problems/active-businesses/
+
+WITH avg_occ AS(
+    SELECT event_type, 
+    AVG(occurrences) AS avg_occurences
+    FROM Events
+    GROUP BY event_type
+)
+SELECT 
+    a.business_id
+FROM Events a
+JOIN avg_occ b ON a.event_type=b.event_type AND a.occurrences>b.avg_occurences
+GROUP BY a.business_id
+HAVING COUNT(a.event_type)>1
