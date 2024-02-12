@@ -1,0 +1,20 @@
+--https://leetcode.com/problems/find-latest-salaries/
+
+WITH a AS(
+    SELECT 
+        emp_id,
+        firstname,
+        lastname,
+        salary,
+        department_id,
+        ROW_NUMBER() OVER(PARTITION BY emp_id ORDER BY salary DESC) AS rw
+    FROM Salary
+)
+SELECT
+    emp_id,
+    firstname,
+    lastname,
+    salary,
+    department_id
+FROM a
+WHERE rw=1
