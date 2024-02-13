@@ -1,0 +1,10 @@
+-- https://leetcode.com/problems/total-traveled-distance/
+
+SELECT 
+    a.user_id, 
+    a.name, 
+    SUM(COALESCE(b.distance,0)) AS [traveled distance]
+FROM Users a
+LEFT JOIN Rides b ON a.user_id=b.user_id
+GROUP BY a.user_id, a.name
+ORDER BY a.user_id 
