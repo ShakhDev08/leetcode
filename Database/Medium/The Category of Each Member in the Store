@@ -1,23 +1,15 @@
 --https://leetcode.com/problems/the-category-of-each-member-in-the-store/
 
---First solution came to my mind:
-SELECT m.member_id, m.name, 'Bronze' AS category 
-FROM Members m
-WHERE NOT EXISTS (
-    SELECT 1 FROM Visits v WHERE m.member_id=v.member_id
-)
-UNION ALL
-SELECT member_id, name, 
-CASE
-    WHEN rate>=0 AND rate<50 THEN 'Silver'
-    WHEN rate>=50 AND rate<80 THEN 'Gold'
-    WHEN rate>=80 THEN 'Diamond'
-END AS category
-FROM (
-    SELECT m.member_id, m.name, 100*(COUNT(p.visit_id)*1.0/NULLIF(COUNT(v.visit_id),0)) AS rate
-    FROM Members m 
-    LEFT JOIN Visits v ON m.member_id=v.member_id
-    LEFT JOIN Purchases p ON v.visit_id=p.visit_id
-    WHERE v.visit_id IS NOT NULL
-    GROUP BY m.member_id, m.name
-) t
+SELECT 
+  m.member_id, 
+  name, 
+  CASE 
+    WHEN COUNT(v.visit_id) = 0 THEN 'Bronze'
+    WHEN ISNULL(COUNT(DISTINCT p.visit_id),0)*100/COUNT(v.visit_id) >= 80 THEN 'Diamond'
+    WHEN ISNULL(COUNT(DISTINCT p.visit_id),0)*100/COUNT(v.visit_id) >= 50 THEN 'Gold'
+    ELSE 'Silver'
+  END AS category
+FROM Members m 
+LEFT JOIN Visits v ON m.member_id = v.member_id
+LEFT JOIN Purchases p ON v.visit_id = p.visit_id
+GROUP BY m.member_id, name
