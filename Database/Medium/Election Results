@@ -1,0 +1,13 @@
+-- https://leetcode.com/problems/election-results/
+
+WITH a AS(
+    SELECT 
+        voter, 
+        candidate,
+        COALESCE(1.0/NULLIF(COUNT(candidate) OVER(PARTITION BY voter),0),0) votes
+    FROM Votes
+)
+SELECT TOP 1 with ties candidate
+FROM a 
+GROUP BY candidate
+ORDER BY SUM(votes) DESC
