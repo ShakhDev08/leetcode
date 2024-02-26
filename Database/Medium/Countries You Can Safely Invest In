@@ -1,0 +1,11 @@
+-- https://leetcode.com/problems/countries-you-can-safely-invest-in/
+WITH a AS(
+  SELECT c.name,
+        (SUM(cl.duration) OVER(PARTITION BY c.name))*1.0/COUNT(cl.duration) OVER(PARTITION BY c.name) AS avg_cl,
+        (SUM(cl.duration) OVER())*1.0/COUNT(cl.duration) OVER() as avg_gl
+  FROM Country c 
+  JOIN Person p ON c.country_code=LEFT(p.phone_number,3)
+  JOIN Calls cl ON p.id=cl.caller_id OR p.id=cl.callee_id
+)
+SELECT DISTINCT name AS country FROM a 
+WHERE avg_cl>avg_gl
