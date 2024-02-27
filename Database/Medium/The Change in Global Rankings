@@ -1,0 +1,11 @@
+--https://leetcode.com/problems/the-change-in-global-rankings/
+
+WITH in_team AS(
+SELECT team_id, name, points,
+ROW_NUMBER() OVER(ORDER BY points DESC, name) AS rw1
+FROM TeamPoints 
+)
+SELECT t.team_id, t.name,
+t.rw1-ROW_NUMBER() OVER(ORDER BY t.points+p.points_change DESC, t.name) AS rank_diff
+FROM in_team t
+JOIN PointsChange p ON  t.team_id=p.team_id
