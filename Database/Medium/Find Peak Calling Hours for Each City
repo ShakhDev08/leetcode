@@ -1,0 +1,11 @@
+--https://leetcode.com/problems/find-peak-calling-hours-for-each-city/
+
+WITH a AS(
+SELECT city, DATEPART(hour,call_time) AS peak_calling_hour, COUNT(caller_id) AS number_of_calls,
+DENSE_RANK() OVER(PARTITION BY city ORDER BY COUNT(caller_id) DESC) AS ds
+FROM Calls
+GROUP BY city, DATEPART(hour,call_time)
+)
+SELECT city, peak_calling_hour, number_of_calls
+FROM a WHERE ds=1
+ORDER BY peak_calling_hour DESC, city DESC
